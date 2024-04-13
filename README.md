@@ -1,8 +1,31 @@
-# React + Vite
+# Quizzical
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Table of Contents
 
-Currently, two official plugins are available:
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Usage](#usage)
+- [Licence](#licence)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About <a name = "about"></a>
+
+Quizzical is one of my React Projects. You can select a category and try yourself with 5 questions.
+Then check your answers. Do your best! Good Luck!
+
+## Getting Started <a name = "getting_started"></a>
+
+
+### Installing
+
+It is very simple. Do the following:
+
+```
+npm i
+npm run dev
+```
+
+## Usage <a name = "usage"></a>
+
+You can also play in the live web app.
+
+## Licence <a name = "licence"></a>
