@@ -21,7 +21,9 @@ export default function Question(props) {
     const shuffledQuestions = data.results.map((datum) => {
       const question = he.decode(datum.question);
       const answers = [datum.correct_answer, ...datum.incorrect_answers];
-      const shuffledAnswers = shuffleArray(answers);
+      const shuffledAnswers = shuffleArray(
+        answers.map((item) => he.decode(item))
+      );
       return {
         question,
         answers: shuffledAnswers,
@@ -44,9 +46,9 @@ export default function Question(props) {
       }
       setCorrectCount(count);
       setIsCheckTime((prevValue) => !prevValue);
-    // } else{
-    //     const errorMessage =()=>{ <p>Hello there</p>}
-    //     return errorMessage
+      // } else{
+      //     const errorMessage =()=>{ <p>Hello there</p>}
+      //     return errorMessage
     }
   }
 
@@ -69,14 +71,16 @@ export default function Question(props) {
                 />
                 <label
                   onClick={
-                    !isCheckTime ? ((event) => handleClick(index, ind, event)): undefined
+                    !isCheckTime
+                      ? (event) => handleClick(index, ind, event)
+                      : undefined
                   }
                   className={`question${index + 1}`}
                   htmlFor={`question${index + 1}answer${ind + 1}`}
                   style={
                     isCheckTime &&
-                    allUserAnswers[index] !== allCorrectAnswers[index] &&
-                    answer === allCorrectAnswers[index]
+                    answer === allUserAnswers[index] &&
+                    allUserAnswers[index] !== allCorrectAnswers[index]
                       ? { backgroundColor: "#F8BCBC", border: "none" }
                       : isCheckTime && answer === allCorrectAnswers[index]
                       ? { backgroundColor: "#94D7A2", border: "none" }
@@ -92,9 +96,11 @@ export default function Question(props) {
         </div>
       ))}
       <div className="endGame-credits">
-        {isCheckTime && <p>You have answered {correctCount}/5 correctly.</p>}
+        {isCheckTime && (
+          <p className="score">You have answered {correctCount}/5 correctly.</p>
+        )}
         <button onClick={checkAnswers} className="button-check">
-          {isCheckTime ? "New Game" : "Check Answers"}
+          {isCheckTime ? "Play Again" : "Check Answers"}
         </button>
       </div>
     </>

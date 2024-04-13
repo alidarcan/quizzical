@@ -14,15 +14,15 @@ main {
 
 .title {
   font-family: Karla, sans-serif;
-  font-size: 31.25px;
+  font-size: 35px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 7px;
+  margin-bottom: 10px;
 }
 
 .description {
   text-align: center;
-  margin-bottom: 29px;
+  margin-bottom: 30px;
 }
 
 .button-start,
@@ -35,7 +35,7 @@ main {
 }
 
 .button-start {
-  font-size: 16px;
+  font-size: 20px;
   color: #F5F7FB;
   background-color: #4D5B9E;
   border-radius: 15px;
@@ -56,7 +56,7 @@ input[type=radio] {
 }
 
 input[type=radio]+label {
-  font-size: 10.24px;
+  font-size: 12px;
   border-radius: 8px;
   background-color: #F5F7FB;
   border: 1px solid #4D5B9E;
@@ -69,24 +69,24 @@ input[type=radio]:checked+label {
 }
 
 .input-group {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: flex-start;
 }
 
 .question {
   font-family: Karla, sans-serif;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   text-align: left;
 }
 
 .button-check {
-  font-size: 10.24px;
+  font-size: 15px;
   border-radius: 10px;
-  width: 120px;
-  height: 35px;
+  width: 150px;
+  height: 40px;
 }
 
 hr {
@@ -102,4 +102,8 @@ hr {
   justify-content: center;
   align-items: center;
   gap: 10px;
+}
+.score{
+  font-size: 15px;
+  font-weight: bold;
 }

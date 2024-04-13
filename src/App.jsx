@@ -1,9 +1,11 @@
 import "./App.css";
 import React from "react";
 import Question from "./components/question";
+import Categories from "./components/categories";
 
 export default function App() {
   const [started, setStarted] = React.useState(false);
+  const [category, setCategory] = React.useState("");
   const [data, setData] = React.useState({});
   const [allCorrectAnswers, setAllCorrectAnswers] = React.useState([]);
   const [allUserAnswers, setAllUserAnswers] = React.useState([
@@ -13,11 +15,11 @@ export default function App() {
     "",
     "",
   ]);
-
+  console.log(category);
   React.useEffect(() => {
     if (started) {
       fetch(
-        "https://opentdb.com/api.php?amount=5&category=32&difficulty=easy&type=multiple"
+        `https://opentdb.com/api.php?amount=5&category=${category}&difficulty=easy&type=multiple`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -30,7 +32,7 @@ export default function App() {
           console.error("Error fetching data:", error);
         });
     }
-  }, [started]);
+  }, [started, category]);
 
   function handleClick(questionIndex, answerIndex, event) {
     const text = event.target.innerHTML;
@@ -40,12 +42,24 @@ export default function App() {
     setAllUserAnswers(newAnswers);
   }
 
+  function handleChange(event){
+    setCategory(event.target.value);
+  }
+
   const main = () => {
     if (!started) {
       return (
         <main className="main">
           <h1 className="title">Quizzical</h1>
           <p className="description">Some description if needed</p>
+          <label htmlFor="category-list">Choose a category:</label>
+          <select onChange={handleChange} value={category} name="category-list" id="category-list">
+            {Categories.map((item, index) =>{
+              return (
+                <option key={index} value={item.id}>{item.name}</option>
+              )
+            })}
+          </select>
           <button onClick={() => setStarted(true)} className="button-start">
             Start Quiz
           </button>
@@ -59,7 +73,9 @@ export default function App() {
             handleClick={handleClick}
             allCorrectAnswers={allCorrectAnswers}
             allUserAnswers={allUserAnswers}
-            resetGame={()=>{setStarted(false)}}
+            resetGame={() => {
+              setStarted(false);
+            }}
           />
         </main>
       );
