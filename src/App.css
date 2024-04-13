@@ -93,9 +93,6 @@ hr {
   margin-bottom: 1rem;
 }
 
-.error-description{
-
-}
 
 .endGame-credits{
   display: flex;
@@ -106,4 +103,8 @@ hr {
 .score{
   font-size: 15px;
   font-weight: bold;
+}
+
+select{
+  margin-bottom: 20px;
 }

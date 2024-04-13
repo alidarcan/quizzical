@@ -5,7 +5,7 @@ import Categories from "./components/categories";
 
 export default function App() {
   const [started, setStarted] = React.useState(false);
-  const [category, setCategory] = React.useState("");
+  const [category, setCategory] = React.useState("9");
   const [data, setData] = React.useState({});
   const [allCorrectAnswers, setAllCorrectAnswers] = React.useState([]);
   const [allUserAnswers, setAllUserAnswers] = React.useState([
@@ -15,7 +15,6 @@ export default function App() {
     "",
     "",
   ]);
-  console.log(category);
   React.useEffect(() => {
     if (started) {
       fetch(
