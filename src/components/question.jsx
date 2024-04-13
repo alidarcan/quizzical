@@ -1,25 +1,110 @@
-import PropTypes from "prop-types"
-export default function Question(props){
+import PropTypes from "prop-types";
+import React from "react";
+import he from "he";
 
-    const {value} = props
-    return(
-        <div>
-            <h2 className="question">Question Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, non inventore autem sequi nostrum, molestias corrupti, facilis vitae exercitationem veniam cum? Obcaecati voluptates eius sunt dolores itaque totam nobis ducimus!</h2>
-            <div className="input-group">
-                {/* {questions} */}
-                <input type="radio" name={`question${value}`} id={`question${value}answer1`} />
-                <label htmlFor={`question${value}answer1`}>Answer 1</label>
-                <input type="radio" name={`question${value}`} id={`question${value}answer2`} />
-                <label htmlFor={`question${value}answer2`}>Answer 2</label>
-                <input type="radio" name={`question${value}`} id={`question${value}answer3`} />
-                <label htmlFor={`question${value}answer3`}>Answer 3</label>
-                <input type="radio" name={`question${value}`} id={`question${value}answer4`} />
-                <label htmlFor={`question${value}answer4`}>Answer 4</label>
-            </div>
-            <hr />
+function shuffleArray(answers) {
+  for (let i = answers.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [answers[i], answers[j]] = [answers[j], answers[i]];
+  }
+  return answers;
+}
+
+export default function Question(props) {
+  const { data, handleClick, allCorrectAnswers, allUserAnswers, resetGame } =
+    props;
+  const [questions, setQuestions] = React.useState([]);
+  const [isCheckTime, setIsCheckTime] = React.useState(false);
+  const [correctCount, setCorrectCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const shuffledQuestions = data.results.map((datum) => {
+      const question = he.decode(datum.question);
+      const answers = [datum.correct_answer, ...datum.incorrect_answers];
+      const shuffledAnswers = shuffleArray(answers);
+      return {
+        question,
+        answers: shuffledAnswers,
+        correct_answer: datum.correct_answer,
+      };
+    });
+    setQuestions(shuffledQuestions);
+  }, [data.results]);
+
+  function checkAnswers() {
+    if (allUserAnswers.every((item) => item.length > 0)) {
+      if (isCheckTime) {
+        resetGame();
+      }
+      let count = 0;
+      for (let i = 0; i < allCorrectAnswers.length; i++) {
+        if (allCorrectAnswers[i] === allUserAnswers[i]) {
+          count++;
+        }
+      }
+      setCorrectCount(count);
+      setIsCheckTime((prevValue) => !prevValue);
+    // } else{
+    //     const errorMessage =()=>{ <p>Hello there</p>}
+    //     return errorMessage
+    }
+  }
+
+  return (
+    <>
+      {questions.map((questionData, index) => (
+        <div key={index}>
+          <h2 className="question">
+            Question {index + 1}: {questionData.question}
+          </h2>
+          <div className="input-group">
+            {questionData.answers.map((answer, ind) => (
+              <div key={`Question${index}Answer${ind}`}>
+                <input
+                  disabled={isCheckTime}
+                  type="radio"
+                  name={`question${index + 1}`}
+                  id={`question${index + 1}answer${ind + 1}`}
+                  value={answer}
+                />
+                <label
+                  onClick={
+                    !isCheckTime ? ((event) => handleClick(index, ind, event)): undefined
+                  }
+                  className={`question${index + 1}`}
+                  htmlFor={`question${index + 1}answer${ind + 1}`}
+                  style={
+                    isCheckTime &&
+                    allUserAnswers[index] !== allCorrectAnswers[index] &&
+                    answer === allCorrectAnswers[index]
+                      ? { backgroundColor: "#F8BCBC", border: "none" }
+                      : isCheckTime && answer === allCorrectAnswers[index]
+                      ? { backgroundColor: "#94D7A2", border: "none" }
+                      : {}
+                  }
+                >
+                  {answer}
+                </label>
+              </div>
+            ))}
+          </div>
+          <hr />
         </div>
-    )
+      ))}
+      <div className="endGame-credits">
+        {isCheckTime && <p>You have answered {correctCount}/5 correctly.</p>}
+        <button onClick={checkAnswers} className="button-check">
+          {isCheckTime ? "New Game" : "Check Answers"}
+        </button>
+      </div>
+    </>
+  );
 }
 Question.propTypes = {
-    value: PropTypes.number
-}
+  data: PropTypes.object,
+  handleClick: PropTypes.func,
+  checkAnswers: PropTypes.func,
+  allCorrectAnswers: PropTypes.array,
+  allUserAnswers: PropTypes.array,
+  resetGame: PropTypes.func,
+};

@@ -4,6 +4,42 @@ import Question from "./components/question";
 
 export default function App() {
   const [started, setStarted] = React.useState(false);
+  const [data, setData] = React.useState({});
+  const [allCorrectAnswers, setAllCorrectAnswers] = React.useState([]);
+  const [allUserAnswers, setAllUserAnswers] = React.useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+
+  React.useEffect(() => {
+    if (started) {
+      fetch(
+        "https://opentdb.com/api.php?amount=5&category=32&difficulty=easy&type=multiple"
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data);
+          setAllCorrectAnswers(
+            data.results.map((datum) => datum.correct_answer)
+          );
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, [started]);
+
+  function handleClick(questionIndex, answerIndex, event) {
+    const text = event.target.innerHTML;
+    const newAnswers = allUserAnswers.map((answer, index) => {
+      return questionIndex === index ? text : answer;
+    });
+    setAllUserAnswers(newAnswers);
+  }
+
   const main = () => {
     if (!started) {
       return (
@@ -15,22 +51,32 @@ export default function App() {
           </button>
         </main>
       );
-    } else if (started) {
+    } else if (started && data.results) {
       return (
         <main>
-          <Question value={1} />
-          <Question value={2}/>
-          <Question value={3}/>
-          <Question value={4}/>
-          <Question value={5}/>
-          <button className="button-check">Check Answers</button>
+          <Question
+            data={data}
+            handleClick={handleClick}
+            allCorrectAnswers={allCorrectAnswers}
+            allUserAnswers={allUserAnswers}
+            resetGame={()=>{setStarted(false)}}
+          />
+        </main>
+      );
+    } else {
+      return (
+        <main>
+          <div className="error-description">
+            <h1>Loading...</h1>
+            <p>
+              If you dont see the questions please refresh the page 5 seconds
+              later.
+            </p>
+          </div>
         </main>
       );
     }
   };
-  return (
-    <>
-      {main()}
-    </>
-  );
+
+  return <>{main()}</>;
 }

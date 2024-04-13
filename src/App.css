@@ -92,3 +92,14 @@ input[type=radio]:checked+label {
 hr {
   margin-bottom: 1rem;
 }
+
+.error-description{
+
+}
+
+.endGame-credits{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
